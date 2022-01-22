@@ -1,0 +1,26 @@
+---
+services:
+  ark-server:
+    # https://ark.fandom.com/wiki/Server_configuration
+    command:
+      - "${ARK_MAP}?Port=7778?QueryPort=27015?SessionName=${ARK_SESSION_NAME}?MaxPlayers=${ARK_MAX_PLAYERS}?listen?ServerPassword=${ARK_SERVER_PASSWORD_JOIN}?AdminPassword=${ARK_SERVER_PASSWORD_ADMIN}"
+      - "-nosteamclient"
+      - "-game"
+      - "-server"
+      - "-NoBattlEye"
+      - "-log"
+    container_name: ark-server
+    entrypoint: /data/ShooterGame/Binaries/Linux/ShooterGameServer
+    hostname: ark-server
+    image: steamcmd/steamcmd:ubuntu
+    ports:
+      - 7778:7778/udp
+      - 7778:7778/tcp
+      - 27015:27015/udp
+      - 27015:27015/tcp
+    restart: unless-stopped
+    volumes:
+      - "/var/log/steamcmd:/root/.steam/logs"
+      - "/var/lib/ark-server:/data"
+
+version: "3.9"
