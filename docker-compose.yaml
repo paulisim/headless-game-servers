@@ -1,4 +1,3 @@
----
 services:
   ark-server:
     # https://ark.fandom.com/wiki/Server_configuration
@@ -10,6 +9,9 @@ services:
       - "-NoBattlEye"
       - "-log"
     container_name: ark-server
+    depends_on:
+      ark-server-dl:
+        condition: service_completed_successfully
     entrypoint: /data/ShooterGame/Binaries/Linux/ShooterGameServer
     hostname: ark-server
     image: steamcmd/steamcmd:ubuntu
@@ -20,7 +22,26 @@ services:
       - 27015:27015/tcp
     restart: unless-stopped
     volumes:
-      - "/var/log/steamcmd:/root/.steam/logs"
-      - "/var/lib/ark-server:/data"
-
-version: "3.9"
+      - ark-data:/data:z
+      - ark-logs:/var/log/steamcmd:z
+  ark-server-dl:
+    command:
+      - "+force_install_dir"
+      - "/data"
+      - "+login"
+      - "anonymous"
+      - "+app_update"
+      - "376030"
+      - "+quit"
+    container_name: ark-server-dl
+    hostname: ark-server-dl
+    image: steamcmd/steamcmd:ubuntu
+    restart: "no"
+    volumes:
+      - ark-data:/data:z
+      - ark-logs:/var/log/steamcmd:z
+volumes:
+  ark-data:
+    name: ark-data
+  ark-logs:
+    name: ark-logs
