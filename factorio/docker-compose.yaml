@@ -30,7 +30,7 @@ services:
         condition: service_completed_successfully
     image: factorio-headless:${FACTORIO_VERSION}
     ports:
-      - "192.168.0.10:34197:34197/udp"
+      - "0.0.0.0:34197:34197/udp"
     restart: always
     volumes:
       - "factorio-data:/factorio"
