@@ -1,4 +1,4 @@
-FROM		debian:13-slim
+FROM		bitnami/minideb:trixie
 
 COPY		entrypoint.sh /
 
